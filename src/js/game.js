@@ -92,6 +92,20 @@ function onMapLoaded(){
             stage.x = x;
             stage.y = y;
         });
+
+        var gbutton = new GButton();
+        gbutton.x = game.width - (74+25);
+        gbutton.y = 220 + 32;
+        game.rootScene.addChild(gbutton);
+
+        game.rootScene.addEventListener('enterframe',function(){
+            if (game.input.a || game.input.b){
+                for (key in game.input){
+                    if ((key == "a" || key == "b") && game.input[key])
+                        console.log(key+"|"+game.input[key]);
+                }
+            }
+        });
     };
 
     game.start();
