@@ -1,22 +1,29 @@
 function maploader(map_file){
-	this.file = map_file;
-	this.json = MyLoadJSON(this, this.file);
+	if (map_file){
+		this.file = map_file;
+		this.json = MyLoadJSON(this, this.file);
+	}
+	this.loadMap = function(map_file){
+		this.file = map_file;
+		this.json = MyLoadJSON(this,this.file);
+	}
 	this.image = "";
 	this.createMap = function(){
-		console.log("[create map]|"+this.file);
+		console.log("MAPLOADER|[create map]|"+this.file);
 		var a_data = Array();
 		for (var i=0; i < this.layers.length; i++){
 			a_data.push(this.layers[i].data);
 		}
 		this.map = new Map(this.json.tilewidth,this.json.tileheight);
-		this.map.image = game.assets[this.json.tilesets[0].image];
+		this.map.image = game.assets[this.image];
 		this.map.loadData(a_data);
 		this.map._data = this.map._data[0];
 		this.map.collisionData = this.collisionMap;
-	},
+		$(scenemanager1).trigger("maploaded");
+	}
 	//this.layer = this.json.layers.length;
 	this.enchantMap = function(){
-		console.log("[enchantMap]");
+		console.log("MAPLOADER|[enchant map]|"+this.file);
 		this.layers = this.json.layers;
 		this.collisionMap = new Array();
 		for (var i = 0; i < this.layers.length; i++){
@@ -35,21 +42,22 @@ function maploader(map_file){
 				}
 			}
 		}
-		this.spawn = [this.json.properties.spawnX,this.json.properties.spawnY];
+		this.spawn = JSON.parse(this.json.properties.spawn);
+		this.portal = JSON.parse(this.json.properties.portal);
 	},
 	this.enchantTileMap = function(){
-		//console.log("[load image]|"+this.json.tilesets[0].image);
-		//game.preload(this.json.tilesets[0].image);
 		this.image = this.json.tilesets[0].image;
+		console.log("MAPLOADER|[load image]|"+this.image);
+		if (!game.assets[this.image])
+			var maploader_obj = this;
+			game.load(this.image,function(){
+				maploader_obj.createMap();
+				maploader_obj = undefined;
+			});
 	}
 
 	this.returnMap = function(){
 		return this.map;
-	}
-
-	this.saveMap = function(){
-		//stage.addChild(this.map);
-		map = this.map;
 	}
 }
 
@@ -59,8 +67,7 @@ function MyLoadJSON(map_element, json_file){
 		map_element.json = json;
 		map_element.enchantMap();
 		map_element.enchantTileMap();
-		map_element.createMap();
-		$(game).trigger("maploaded");
+		//map_element.createMap();
 		//map_element.draw();
 	});
 }
