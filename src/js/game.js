@@ -16,6 +16,7 @@ window.onload = function() {
     //maploader1 = new maploader('map1.json');
     scenemanager1.startmap("map1.json");
     $(game).bind("sceneloaded",this.onsceneloaded);
+
     game.start();
 };
 
@@ -30,14 +31,15 @@ function onsceneloaded(event,scenemanager_inst){
     //};
     //console.log(event);
     //console.log(scenemanager_inst);
+    console.log("GAME|[event]|onsceneloaded");
     game.currentScene.addEventListener('enterframe',function(){
 
         var x = Math.min((game.width  - 16) / 2 - player.x, 0);
         var y = Math.min((game.height - 16) / 2 - player.y, 0);
         x = Math.max(game.width,  x + scenemanager_inst.maploader.map.width)  - scenemanager_inst.maploader.map.width;
         y = Math.max(game.height, y + scenemanager_inst.maploader.map.height) - scenemanager_inst.maploader.map.height;
-        stage.x = x;
-        stage.y = y;
+        scenemanager_inst.this_set.stage.x = x;
+        scenemanager_inst.this_set.stage.y = y;
 
         if (game.input.a || game.input.b){
             for (key in game.input){
@@ -48,6 +50,8 @@ function onsceneloaded(event,scenemanager_inst){
 
         $(scenemanager_inst).trigger("gametick");
     });
+
+    genearatePad();
 
     //game.start();
 }
@@ -108,7 +112,7 @@ function generatePlayer(maploader_inst){
     return player;
 }
 
-function genearatePad(maploader_inst){
+function genearatePad(){
     var pad = new Pad();
         pad.x = 0;
         pad.y = 220;

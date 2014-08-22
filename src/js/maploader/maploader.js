@@ -48,12 +48,15 @@ function maploader(map_file){
 	this.enchantTileMap = function(){
 		this.image = this.json.tilesets[0].image;
 		console.log("MAPLOADER|[load image]|"+this.image);
-		if (!game.assets[this.image])
+		if (!game.assets[this.image]){
 			var maploader_obj = this;
 			game.load(this.image,function(){
 				maploader_obj.createMap();
 				maploader_obj = undefined;
 			});
+		} else {
+			this.createMap();
+		}
 	}
 
 	this.returnMap = function(){
