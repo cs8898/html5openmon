@@ -11,7 +11,13 @@ function maploader(map_file){
 	this.createMap = function(){
 		console.log("MAPLOADER|[create map]|"+this.file);
 		var a_data = Array();
-		for (var i=0; i < this.layers.length; i++){
+		var a_end = this.layers.length;
+		if( this.toplayer > 0){
+			a_end = this.toplayer;
+		}
+		//console.log("MAPLOADE|[debug|create map]|a_end="+a_end);
+		for (var i = 1; i < a_end; i++){
+			//console.log("MAPLOADE|[debug|create map|a]|i="+i);
 			a_data.push(this.layers[i].data);
 		}
 		this.map = new Map(this.json.tilewidth,this.json.tileheight);
@@ -19,6 +25,21 @@ function maploader(map_file){
 		this.map.loadData(a_data);
 		this.map._data = this.map._data[0];
 		this.map.collisionData = this.collisionMap;
+
+		this.map0 = undefined;
+		if( this.toplayer > 0){
+			var b_data = Array();
+			for(var i = this.toplayer; i < this.layers.length; i++){
+				//console.log("MAPLOADE|[debug|create map|b]|i="+i);
+				b_data.push(this.layers[i].data);
+			}
+
+			this.map0 = new Map(this.json.tilewidth,this.json.tileheight);
+			this.map0.image = game.assets[this.image];
+			this.map0.loadData(b_data);
+			this.map0._data = this.map0._data[0];
+		}
+
 		$(scenemanager1).trigger("maploaded");
 	}
 	//this.layer = this.json.layers.length;
@@ -44,6 +65,7 @@ function maploader(map_file){
 		}
 		this.spawn = JSON.parse(this.json.properties.spawn);
 		this.portal = JSON.parse(this.json.properties.portal);
+		this.toplayer = parseInt(this.json.properties.toplayer);
 	},
 	this.enchantTileMap = function(){
 		this.image = this.json.tilesets[0].image;

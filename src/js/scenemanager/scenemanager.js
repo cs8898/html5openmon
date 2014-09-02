@@ -17,6 +17,10 @@ function scenemanager(){
 
     	stage.addChild(this.maploader.map);
         stage.addChild(player);
+        if (this.maploader.map0){
+            //console.log("SCENEMANAGER|[debug|buildscene|map0]");
+            stage.addChild(this.maploader.map0);
+        }
         //group.addChild(foregroundMap);
         //game.rootScene.addChild(group);
         //scene = new Scene();
@@ -58,5 +62,5 @@ function scenemanager(){
         }
     });
 
-    $(this).bind("maploaded",this.onmaploaded);
+    //$(this).bind("maploaderready",this.onmaploaded);
 }

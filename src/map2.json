@@ -48,7 +48,8 @@
  "properties":
     {
      "portal":"{\"1\":{\"x\":16,\"y\":21,\"s\":\"map1.json\"}}",
-     "spawn":"{\"x\":10,\"y\":10}"
+     "spawn":"{\"x\":10,\"y\":10}",
+     "toplayer":"-1"
     },
  "tileheight":16,
  "tilesets":[
